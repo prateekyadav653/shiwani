@@ -1,0 +1,21 @@
+
+trigger ContactTrig on Contact (after insert) {
+List<Id> acid = new List<Id>();
+for(Contact aci : Trigger.new)
+{
+acid.add(aci.accountId);
+}
+List<Account> accs =[select id,Total_Number_of_Contacts__c , (select id from Contacts) from Account where id in :acid];
+List<Account> updateAccount = new List<Account>();
+for(Account acc : accs)
+{
+List<contact> cons = acc.Contacts;
+acc.Total_Number_of_Contacts__c = cons.size();//total number of contacts
+updateAccount.add(acc);
+}
+update updateAccount;
+}
+
+[11:12] Gunjan Fulzele
+Trigger.Old ke liye bhi aayenga na
+
